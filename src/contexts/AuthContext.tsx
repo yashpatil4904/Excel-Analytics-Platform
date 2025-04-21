@@ -1,0 +1,177 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { jwtDecode } from 'jwt-decode';
+
+// Types
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+}
+
+interface AuthContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (name: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
+}
+
+// Mock API calls (replace with actual API calls later)
+const loginApi = async (email: string, password: string): Promise<string> => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // For demo purposes, use a mock token with admin role for specific email
+      const isAdmin = email === 'admin@example.com';
+      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(
+        JSON.stringify({
+          id: '12345',
+          email,
+          name: email.split('@')[0],
+          role: isAdmin ? 'admin' : 'user',
+          exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour expiration
+        })
+      )}.signature`;
+      resolve(token);
+    }, 1000);
+  });
+};
+
+const registerApi = async (
+  name: string,
+  email: string,
+  password: string
+): Promise<string> => {
+  // Simulate API call
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.${btoa(
+        JSON.stringify({
+          id: '12345',
+          email,
+          name,
+          role: 'user',
+          exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour expiration
+        })
+      )}.signature`;
+      resolve(token);
+    }, 1000);
+  });
+};
+
+// Create auth context
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// Auth Provider component
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Check for token on initial load
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      
+      if (token) {
+        try {
+          const decoded = jwtDecode<User & { exp: number }>(token);
+          
+          // Check if token is expired
+          const currentTime = Math.floor(Date.now() / 1000);
+          if (decoded.exp && decoded.exp < currentTime) {
+            localStorage.removeItem('token');
+            setUser(null);
+          } else {
+            setUser({
+              id: decoded.id,
+              email: decoded.email,
+              name: decoded.name,
+              role: decoded.role
+            });
+          }
+        } catch (error) {
+          localStorage.removeItem('token');
+          setUser(null);
+        }
+      }
+      
+      setIsLoading(false);
+    };
+
+    checkAuth();
+  }, []);
+
+  // Login function
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      const token = await loginApi(email, password);
+      localStorage.setItem('token', token);
+      
+      const decoded = jwtDecode<User>(token);
+      setUser({
+        id: decoded.id,
+        email: decoded.email,
+        name: decoded.name,
+        role: decoded.role
+      });
+    } catch (error) {
+      throw new Error('Login failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Register function
+  const register = async (name: string, email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      const token = await registerApi(name, email, password);
+      localStorage.setItem('token', token);
+      
+      const decoded = jwtDecode<User>(token);
+      setUser({
+        id: decoded.id,
+        email: decoded.email,
+        name: decoded.name,
+        role: decoded.role
+      });
+    } catch (error) {
+      throw new Error('Registration failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Logout function
+  const logout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+  };
+
+  return (
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        isAuthenticated: !!user, 
+        isLoading, 
+        login, 
+        register, 
+        logout 
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+// Custom hook to use auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
