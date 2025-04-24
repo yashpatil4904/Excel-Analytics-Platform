@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import Button from '../components/ui/Button';
 
-const LandingPage: React.FC = () => {
+const LandingPage = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -345,4 +345,4 @@ const LandingPage: React.FC = () => {
   );
 };
 
-export default LandingPage;
+export default LandingPage; 

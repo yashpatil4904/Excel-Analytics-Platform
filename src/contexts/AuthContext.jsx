@@ -1,25 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
-// Types
-interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: string;
-}
-
-interface AuthContextType {
-  user: User | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string) => Promise<void>;
-  logout: () => void;
-}
-
 // Mock API calls (replace with actual API calls later)
-const loginApi = async (email: string, password: string): Promise<string> => {
+const loginApi = async (email, password) => {
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -39,11 +22,7 @@ const loginApi = async (email: string, password: string): Promise<string> => {
   });
 };
 
-const registerApi = async (
-  name: string,
-  email: string,
-  password: string
-): Promise<string> => {
+const registerApi = async (name, email, password) => {
   // Simulate API call
   return new Promise((resolve) => {
     setTimeout(() => {
@@ -62,11 +41,11 @@ const registerApi = async (
 };
 
 // Create auth context
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext = createContext(undefined);
 
 // Auth Provider component
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   // Check for token on initial load
@@ -76,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (token) {
         try {
-          const decoded = jwtDecode<User & { exp: number }>(token);
+          const decoded = jwtDecode(token);
           
           // Check if token is expired
           const currentTime = Math.floor(Date.now() / 1000);
@@ -104,13 +83,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // Login function
-  const login = async (email: string, password: string) => {
+  const login = async (email, password) => {
     setIsLoading(true);
     try {
       const token = await loginApi(email, password);
       localStorage.setItem('token', token);
       
-      const decoded = jwtDecode<User>(token);
+      const decoded = jwtDecode(token);
       setUser({
         id: decoded.id,
         email: decoded.email,
@@ -125,13 +104,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Register function
-  const register = async (name: string, email: string, password: string) => {
+  const register = async (name, email, password) => {
     setIsLoading(true);
     try {
       const token = await registerApi(name, email, password);
       localStorage.setItem('token', token);
       
-      const decoded = jwtDecode<User>(token);
+      const decoded = jwtDecode(token);
       setUser({
         id: decoded.id,
         email: decoded.email,
@@ -174,4 +153,4 @@ export const useAuth = () => {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-};
+}; 

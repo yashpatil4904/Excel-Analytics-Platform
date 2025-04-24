@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import Button from '../components/ui/Button';
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8 bg-slate-50">
       <div className="text-center">
@@ -28,4 +28,4 @@ const NotFoundPage: React.FC = () => {
   );
 };
 
-export default NotFoundPage;
+export default NotFoundPage; 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Save, Bell, Lock, User, Globe, Palette } from 'lucide-react';
 import Button from '../components/ui/Button';
 
-const SettingsPage: React.FC = () => {
+const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState('profile');
   
   const [settings, setSettings] = useState({
@@ -24,12 +24,12 @@ const SettingsPage: React.FC = () => {
     }
   });
 
-  const handleNotificationChange = (key: string) => {
+  const handleNotificationChange = (key) => {
     setSettings(prev => ({
       ...prev,
       notifications: {
         ...prev.notifications,
-        [key]: !prev.notifications[key as keyof typeof prev.notifications]
+        [key]: !prev.notifications[key]
       }
     }));
   };
@@ -171,4 +171,4 @@ const SettingsPage: React.FC = () => {
   );
 };
 
-export default SettingsPage;
+export default SettingsPage; 

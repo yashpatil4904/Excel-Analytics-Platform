@@ -5,15 +5,15 @@ import { FileSpreadsheet, Upload, AlertCircle, Check, X } from 'lucide-react';
 import Button from '../components/ui/Button';
 import * as XLSX from 'xlsx';
 
-const UploadPage: React.FC = () => {
+const UploadPage = () => {
   const navigate = useNavigate();
-  const [files, setFiles] = useState<File[]>([]);
-  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [fileData, setFileData] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [files, setFiles] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState(null);
+  const [fileData, setFileData] = useState(null);
+  const [error, setError] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles: File[]) => {
+  const onDrop = useCallback((acceptedFiles) => {
     // Filter for Excel files
     const excelFiles = acceptedFiles.filter(
       file => file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
@@ -30,10 +30,10 @@ const UploadPage: React.FC = () => {
     
     // Read the Excel file data for preview
     const reader = new FileReader();
-    reader.onload = (e: ProgressEvent<FileReader>) => {
+    reader.onload = (e) => {
       try {
         if (e.target?.result) {
-          const data = new Uint8Array(e.target.result as ArrayBuffer);
+          const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
           const firstSheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[firstSheetName];
@@ -44,7 +44,7 @@ const UploadPage: React.FC = () => {
             size: excelFiles[0].size,
             sheetName: firstSheetName,
             rows: jsonData.length,
-            columns: jsonData[0] ? (jsonData[0] as any[]).length : 0,
+            columns: jsonData[0] ? jsonData[0].length : 0,
             headers: jsonData[0] || [],
             preview: jsonData.slice(1, 6) // First 5 rows for preview
           });
@@ -73,7 +73,7 @@ const UploadPage: React.FC = () => {
     setError(null);
   };
 
-  const formatFileSize = (bytes: number) => {
+  const formatFileSize = (bytes) => {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -201,7 +201,7 @@ const UploadPage: React.FC = () => {
                         <table className="w-full text-sm text-left border-collapse">
                           <thead>
                             <tr className="bg-slate-100">
-                              {fileData.headers.map((header: any, index: number) => (
+                              {fileData.headers.map((header, index) => (
                                 <th key={index} className="px-3 py-2 border border-slate-200">
                                   {header}
                                 </th>
@@ -209,9 +209,9 @@ const UploadPage: React.FC = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {fileData.preview.map((row: any, rowIndex: number) => (
+                            {fileData.preview.map((row, rowIndex) => (
                               <tr key={rowIndex} className="bg-white">
-                                {fileData.headers.map((_: any, colIndex: number) => (
+                                {fileData.headers.map((_, colIndex) => (
                                   <td key={colIndex} className="px-3 py-2 border border-slate-200">
                                     {row[colIndex]}
                                   </td>
@@ -249,26 +249,22 @@ const UploadPage: React.FC = () => {
             <h2 className="text-lg font-semibold text-slate-900 mb-4">
               Upload Guidelines
             </h2>
-            <ul className="space-y-3">
+            <ul className="space-y-3 text-sm text-slate-600">
               <li className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">Files must be in Excel format (.xlsx, .xls)</span>
+                <span>Upload Excel files (.xlsx or .xls) only</span>
               </li>
               <li className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">First row should contain column headers</span>
+                <span>Maximum file size: 10MB</span>
               </li>
               <li className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">Maximum file size: 5MB</span>
+                <span>First row should contain column headers</span>
               </li>
               <li className="flex items-start">
                 <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">Data should be properly formatted (e.g., numbers as numbers, dates as dates)</span>
-              </li>
-              <li className="flex items-start">
-                <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0 mt-0.5" />
-                <span className="text-sm text-slate-700">Remove any sensitive or personal information before uploading</span>
+                <span>Data should be clean and properly formatted</span>
               </li>
             </ul>
           </div>
@@ -276,28 +272,32 @@ const UploadPage: React.FC = () => {
           {/* Tips */}
           <div className="card p-6">
             <h2 className="text-lg font-semibold text-slate-900 mb-4">
-              Tips for Better Visualizations
+              Tips for Better Results
             </h2>
-            <ul className="space-y-3">
+            <ul className="space-y-3 text-sm text-slate-600">
               <li className="flex items-start">
-                <span className="w-5 h-5 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">1</span>
-                <span className="text-sm text-slate-700">Clean your data before uploading</span>
+                <div className="w-5 h-5 bg-primary-100 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-medium text-primary-600">1</span>
+                </div>
+                <span>Remove any empty rows or columns before uploading</span>
               </li>
               <li className="flex items-start">
-                <span className="w-5 h-5 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">2</span>
-                <span className="text-sm text-slate-700">Ensure consistent formatting across columns</span>
+                <div className="w-5 h-5 bg-primary-100 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-medium text-primary-600">2</span>
+                </div>
+                <span>Ensure consistent data types in each column</span>
               </li>
               <li className="flex items-start">
-                <span className="w-5 h-5 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">3</span>
-                <span className="text-sm text-slate-700">Remove duplicate entries</span>
+                <div className="w-5 h-5 bg-primary-100 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-medium text-primary-600">3</span>
+                </div>
+                <span>Use clear and descriptive column headers</span>
               </li>
               <li className="flex items-start">
-                <span className="w-5 h-5 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">4</span>
-                <span className="text-sm text-slate-700">Use descriptive column headers</span>
-              </li>
-              <li className="flex items-start">
-                <span className="w-5 h-5 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">5</span>
-                <span className="text-sm text-slate-700">Consider what type of visualization would best represent your data</span>
+                <div className="w-5 h-5 bg-primary-100 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">
+                  <span className="text-xs font-medium text-primary-600">4</span>
+                </div>
+                <span>Check for any merged cells and unmerge them</span>
               </li>
             </ul>
           </div>
@@ -307,4 +307,4 @@ const UploadPage: React.FC = () => {
   );
 };
 
-export default UploadPage;
+export default UploadPage; 

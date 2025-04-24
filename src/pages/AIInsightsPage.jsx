@@ -3,12 +3,12 @@ import { useParams } from 'react-router-dom';
 import { BarChart2, TrendingUp, Zap, Info, Loader2 } from 'lucide-react';
 import Button from '../components/ui/Button';
 
-const AIInsightsPage: React.FC = () => {
-  const { fileId } = useParams<{ fileId: string }>();
+const AIInsightsPage = () => {
+  const { fileId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   
   // Mock data for AI insights
-  const [insights, setInsights] = useState<any>(null);
+  const [insights, setInsights] = useState(null);
   
   useEffect(() => {
     // Simulate API call to get insights
@@ -70,7 +70,7 @@ const AIInsightsPage: React.FC = () => {
   }, [fileId]);
   
   // Helper function to get impact color
-  const getImpactColor = (impact: string) => {
+  const getImpactColor = (impact) => {
     switch (impact) {
       case 'high':
         return 'text-red-600 bg-red-50';
@@ -157,7 +157,7 @@ const AIInsightsPage: React.FC = () => {
               Key Findings
             </h2>
             <div className="space-y-6">
-              {insights.keyFindings.map((finding: any) => (
+              {insights.keyFindings.map((finding) => (
                 <div key={finding.id} className="border-b border-slate-100 pb-5 last:border-b-0 last:pb-0">
                   <div className="flex justify-between items-start mb-3 gap-4">
                     <h3 className="text-base font-medium text-slate-900">{finding.title}</h3>
@@ -184,7 +184,7 @@ const AIInsightsPage: React.FC = () => {
               Recommended Actions
             </h2>
             <ul className="space-y-3 mb-6">
-              {insights.recommendations.map((recommendation: string, index: number) => (
+              {insights.recommendations.map((recommendation, index) => (
                 <li key={index} className="flex items-start">
                   <span className="w-6 h-6 bg-primary-100 text-primary-700 rounded-full flex items-center justify-center mr-3 flex-shrink-0 mt-0.5">
                     {index + 1}
@@ -214,7 +214,7 @@ const AIInsightsPage: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {insights.correlations.map((correlation: any, index: number) => (
+                  {insights.correlations.map((correlation, index) => (
                     <tr key={index} className="border-b border-slate-100 hover:bg-slate-50">
                       <td className="px-4 py-3 font-medium text-slate-900">{correlation.variable1}</td>
                       <td className="px-4 py-3 text-slate-600">{correlation.variable2}</td>
@@ -252,4 +252,4 @@ const AIInsightsPage: React.FC = () => {
   );
 };
 
-export default AIInsightsPage;
+export default AIInsightsPage; 

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Search, Book, HelpCircle, MessageCircle, FileText, ChevronDown, ExternalLink } from 'lucide-react';
 import Button from '../components/ui/Button';
 
-const HelpSupportPage: React.FC = () => {
+const HelpSupportPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
-  const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
+  const [expandedFaq, setExpandedFaq] = useState(null);
 
   const faqs = [
     {
@@ -133,4 +133,4 @@ const HelpSupportPage: React.FC = () => {
   );
 };
 
-export default HelpSupportPage;
+export default HelpSupportPage; 

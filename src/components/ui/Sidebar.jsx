@@ -13,12 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-interface SidebarProps {
-  isOpen: boolean;
-  toggleSidebar: () => void;
-}
-
-const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
+const Sidebar = ({ isOpen, toggleSidebar }) => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
 
@@ -185,4 +180,4 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, toggleSidebar }) => {
   );
 };
 
-export default Sidebar;
+export default Sidebar; 

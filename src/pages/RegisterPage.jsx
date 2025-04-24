@@ -5,23 +5,16 @@ import { ArrowLeft, UserPlus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 
-interface RegisterFormData {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const RegisterPage: React.FC = () => {
+const RegisterPage = () => {
   const { register } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   
-  const { register: registerField, handleSubmit, watch, formState: { errors } } = useForm<RegisterFormData>();
+  const { register: registerField, handleSubmit, watch, formState: { errors } } = useForm();
   const password = watch('password');
   
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data) => {
     setIsLoading(true);
     setError(null);
     
@@ -185,4 +178,4 @@ const RegisterPage: React.FC = () => {
   );
 };
 
-export default RegisterPage;
+export default RegisterPage; 

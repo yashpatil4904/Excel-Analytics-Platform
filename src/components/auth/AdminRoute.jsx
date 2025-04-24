@@ -2,12 +2,9 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, isLoading, user } = useAuth();
+  const isAdmin = user?.role === 'admin';
 
   if (isLoading) {
     return (
@@ -21,7 +18,11 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return <>{children}</>;
 };
 
-export default ProtectedRoute;
+export default AdminRoute; 

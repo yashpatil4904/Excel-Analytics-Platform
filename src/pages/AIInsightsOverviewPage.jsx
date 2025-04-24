@@ -31,7 +31,7 @@ const mockInsights = [
   }
 ];
 
-const getImpactColor = (impact: string) => {
+const getImpactColor = (impact) => {
   switch (impact) {
     case 'high':
       return 'text-red-600 bg-red-50';
@@ -44,7 +44,7 @@ const getImpactColor = (impact: string) => {
   }
 };
 
-const AIInsightsOverviewPage: React.FC = () => {
+const AIInsightsOverviewPage = () => {
   return (
     <div className="fade-in p-6">
       <h1 className="text-2xl font-semibold text-slate-900 mb-4">AI Insights Overview</h1>
@@ -71,4 +71,4 @@ const AIInsightsOverviewPage: React.FC = () => {
   );
 };
 
-export default AIInsightsOverviewPage;
+export default AIInsightsOverviewPage; 

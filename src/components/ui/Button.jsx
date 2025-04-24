@@ -1,20 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
-type ButtonSize = 'xs' | 'sm' | 'md' | 'lg';
-
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  fullWidth?: boolean;
-  isLoading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  children: React.ReactNode;
-}
-
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   variant = 'primary',
   size = 'md',
   fullWidth = false,
@@ -100,4 +87,4 @@ const Button: React.FC<ButtonProps> = ({
   );
 };
 
-export default Button;
+export default Button; 

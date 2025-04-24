@@ -5,20 +5,15 @@ import { ArrowLeft, LogIn } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
 
-interface LoginFormData {
-  email: string;
-  password: string;
-}
-
-const LoginPage: React.FC = () => {
+const LoginPage = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   
-  const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
+  const { register, handleSubmit, formState: { errors } } = useForm();
   
-  const onSubmit = async (data: LoginFormData) => {
+  const onSubmit = async (data) => {
     setIsLoading(true);
     setError(null);
     
@@ -146,4 +141,4 @@ const LoginPage: React.FC = () => {
   );
 };
 
-export default LoginPage;
+export default LoginPage; 

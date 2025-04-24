@@ -4,7 +4,7 @@ import { Menu, X, BarChart2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import Button from './Button';
 
-const Navbar: React.FC = () => {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, logout } = useAuth();
@@ -148,4 +148,4 @@ const Navbar: React.FC = () => {
   );
 };
 
-export default Navbar;
+export default Navbar; 

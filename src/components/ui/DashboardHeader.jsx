@@ -2,11 +2,7 @@ import React from 'react';
 import { Menu, Bell, Search, User } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
-interface DashboardHeaderProps {
-  toggleSidebar: () => void;
-}
-
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ toggleSidebar }) => {
+const DashboardHeader = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();
   const [showUserMenu, setShowUserMenu] = React.useState(false);
 
@@ -87,4 +83,4 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ toggleSidebar }) => {
   );
 };
 
-export default DashboardHeader;
+export default DashboardHeader; 

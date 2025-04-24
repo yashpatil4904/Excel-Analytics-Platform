@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import Sidebar from '../ui/Sidebar';
 import DashboardHeader from '../ui/DashboardHeader';
 
-const DashboardLayout: React.FC = () => {
+const DashboardLayout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -27,4 +27,4 @@ const DashboardLayout: React.FC = () => {
   );
 };
 
-export default DashboardLayout;
+export default DashboardLayout; 

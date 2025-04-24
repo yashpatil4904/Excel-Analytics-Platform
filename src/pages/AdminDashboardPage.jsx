@@ -1,7 +1,7 @@
 import React from 'react';
 import { Users, FileSpreadsheet, BarChart, Settings } from 'lucide-react';
 
-const AdminDashboardPage: React.FC = () => {
+const AdminDashboardPage = () => {
   // Mock data for admin stats
   const stats = [
     { id: 1, title: 'Total Users', value: '152', icon: Users, change: '+12%', changeType: 'positive' },
@@ -109,4 +109,4 @@ const AdminDashboardPage: React.FC = () => {
   );
 };
 
-export default AdminDashboardPage;
+export default AdminDashboardPage; 

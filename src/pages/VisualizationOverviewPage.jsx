@@ -7,7 +7,7 @@ const mockFiles = [
   { id: 'file3', name: 'Customer_Segments_2024.xlsx', uploadedAt: '2024-02-28' },
 ];
 
-const VisualizationOverviewPage: React.FC = () => {
+const VisualizationOverviewPage = () => {
   return (
     <div className="fade-in p-6">
       <h1 className="text-2xl font-semibold text-slate-900 mb-4">Visualizations Overview</h1>
@@ -44,4 +44,4 @@ const VisualizationOverviewPage: React.FC = () => {
   );
 };
 
-export default VisualizationOverviewPage;
+export default VisualizationOverviewPage; 

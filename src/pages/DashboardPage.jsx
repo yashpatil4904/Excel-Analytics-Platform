@@ -74,12 +74,12 @@ const mockCharts = [
   }
 ];
 
-const DashboardPage: React.FC = () => {
+const DashboardPage = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState<'files' | 'visualizations'>('files');
+  const [activeTab, setActiveTab] = useState('files');
 
   // Format date
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-US', {
       month: 'short',
@@ -248,28 +248,29 @@ const DashboardPage: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
                         <FileSpreadsheet className="w-5 h-5 text-green-600 mr-2" />
-                        <div className="text-sm font-medium text-slate-900">{file.name}</div>
+                        <span className="text-sm font-medium text-slate-900">{file.name}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {formatDate(file.uploadDate)}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-slate-500">{formatDate(file.uploadDate)}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {file.size}
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-slate-500">{file.size}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                      {file.rows} rows × {file.columns} columns
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-slate-500">{file.rows} rows × {file.columns} columns</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex items-center justify-end space-x-2">
-                        <Link to={`/dashboard/visualization/${file.id}`}>
-                          <Button variant="ghost" size="sm" leftIcon={<Eye size={14} />}>
-                            Visualize
-                          </Button>
-                        </Link>
-                        <Button variant="ghost" size="sm" leftIcon={<Trash2 size={14} />} className="text-red-600 hover:text-red-700">
-                          Delete
-                        </Button>
+                        <button className="text-primary-600 hover:text-primary-900">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button className="text-slate-600 hover:text-slate-900">
+                          <Download className="w-4 h-4" />
+                        </button>
+                        <button className="text-red-600 hover:text-red-900">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -285,43 +286,39 @@ const DashboardPage: React.FC = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Chart Name</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Created Date</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider">Source File</th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-slate-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-slate-200">
-                {mockCharts.map((chart) => {
-                  const sourceFile = mockFiles.find(file => file.id === chart.fileId);
-                  return (
-                    <tr key={chart.id} className="hover:bg-slate-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <BarChart2 className="w-5 h-5 text-primary-600 mr-2" />
-                          <div className="text-sm font-medium text-slate-900">{chart.name}</div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                        {formatDate(chart.createdDate)}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                        {chart.type}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-500">
-                        {sourceFile?.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <div className="flex items-center justify-end space-x-2">
-                          <Button variant="ghost" size="sm" leftIcon={<Eye size={14} />}>
-                            View
-                          </Button>
-                          <Button variant="ghost" size="sm" leftIcon={<Download size={14} />}>
-                            Export
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {mockCharts.map((chart) => (
+                  <tr key={chart.id} className="hover:bg-slate-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <BarChart2 className="w-5 h-5 text-secondary-600 mr-2" />
+                        <span className="text-sm font-medium text-slate-900">{chart.name}</span>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-slate-500">{formatDate(chart.createdDate)}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="text-sm text-slate-500">{chart.type}</span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center justify-end space-x-2">
+                        <button className="text-primary-600 hover:text-primary-900">
+                          <Eye className="w-4 h-4" />
+                        </button>
+                        <button className="text-slate-600 hover:text-slate-900">
+                          <Download className="w-4 h-4" />
+                        </button>
+                        <button className="text-red-600 hover:text-red-900">
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -331,4 +328,4 @@ const DashboardPage: React.FC = () => {
   );
 };
 
-export default DashboardPage;
+export default DashboardPage; 

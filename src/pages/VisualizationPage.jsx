@@ -62,11 +62,9 @@ const COLORS = [
   '#3498DB', '#2ECC71', '#E74C3C', '#34495E', '#16A085'
 ];
 
-type ChartType = 'bar' | 'line' | 'pie' | 'scatter' | '3d';
-
-const VisualizationPage: React.FC = () => {
-  const { fileId } = useParams<{ fileId: string }>();
-  const [chartType, setChartType] = useState<ChartType>('bar');
+const VisualizationPage = () => {
+  const { fileId } = useParams();
+  const [chartType, setChartType] = useState('bar');
   const [xAxis, setXAxis] = useState('month');
   const [yAxis, setYAxis] = useState('sales');
   const [title, setTitle] = useState('Sales Performance');
@@ -262,7 +260,7 @@ const VisualizationPage: React.FC = () => {
             Share
           </Button>
           <Button 
-            variant="primary" 
+            variant="outline" 
             size="sm"
             leftIcon={<Lightbulb size={16} />}
           >
@@ -272,214 +270,140 @@ const VisualizationPage: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Chart Settings - Desktop: Sidebar, Mobile: Collapsible panel */}
-        <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 lg:block order-2 lg:order-1">
-          <div className="flex justify-between items-center mb-4 lg:mb-6">
-            <h2 className="text-lg font-semibold text-slate-900">Chart Settings</h2>
-            <button 
-              className="lg:hidden text-slate-500 hover:text-slate-700"
-              onClick={() => setShowSettings(!showSettings)}
-            >
-              <ChevronDown 
-                size={20} 
-                className={`transform transition-transform ${showSettings ? 'rotate-180' : ''}`} 
-              />
-            </button>
-          </div>
-
-          <div className={`${showSettings ? 'block' : 'hidden'} lg:block`}>
-            {/* Chart Type */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Chart Type
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                <button
-                  className={`p-2 rounded-md flex flex-col items-center text-xs ${
-                    chartType === 'bar' 
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200' 
-                      : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                  onClick={() => setChartType('bar')}
-                >
-                  <BarChartIcon size={18} className="mb-1" />
-                  Bar
-                </button>
-                <button
-                  className={`p-2 rounded-md flex flex-col items-center text-xs ${
-                    chartType === 'line' 
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200' 
-                      : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                  onClick={() => setChartType('line')}
-                >
-                  <LineChartIcon size={18} className="mb-1" />
-                  Line
-                </button>
-                <button
-                  className={`p-2 rounded-md flex flex-col items-center text-xs ${
-                    chartType === 'pie' 
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200' 
-                      : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                  onClick={() => setChartType('pie')}
-                >
-                  <PieChartIcon size={18} className="mb-1" />
-                  Pie
-                </button>
-                <button
-                  className={`p-2 rounded-md flex flex-col items-center text-xs ${
-                    chartType === 'scatter' 
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200' 
-                      : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                  onClick={() => setChartType('scatter')}
-                >
-                  <ScatterChart size={18} className="mb-1" />
-                  Scatter
-                </button>
-                <button
-                  className={`p-2 rounded-md flex flex-col items-center text-xs ${
-                    chartType === '3d' 
-                      ? 'bg-primary-50 text-primary-700 border border-primary-200' 
-                      : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100'
-                  }`}
-                  onClick={() => setChartType('3d')}
-                >
-                  <Cube size={18} className="mb-1" />
-                  3D Column
-                </button>
-              </div>
-            </div>
-
-            {/* Chart Title */}
-            <div className="mb-6">
-              <label htmlFor="chart-title" className="block text-sm font-medium text-slate-700 mb-2">
-                Chart Title
-              </label>
-              <input
-                type="text"
-                id="chart-title"
-                className="form-input"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="Enter chart title"
-              />
-            </div>
-
-            {/* Data Selection */}
-            {chartType !== 'pie' && chartType !== '3d' && (
-              <>
-                <div className="mb-4">
-                  <label htmlFor="x-axis" className="block text-sm font-medium text-slate-700 mb-2">
-                    X-Axis Data
-                  </label>
-                  <select
-                    id="x-axis"
-                    className="form-input"
-                    value={xAxis}
-                    onChange={(e) => setXAxis(e.target.value)}
-                  >
-                    {getColumns().map((column) => (
-                      <option key={column} value={column}>
-                        {column.charAt(0).toUpperCase() + column.slice(1)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="mb-6">
-                  <label htmlFor="y-axis" className="block text-sm font-medium text-slate-700 mb-2">
-                    Y-Axis Data
-                  </label>
-                  <select
-                    id="y-axis"
-                    className="form-input"
-                    value={yAxis}
-                    onChange={(e) => setYAxis(e.target.value)}
-                  >
-                    {getColumns()
-                      .filter(col => col !== xAxis && col !== 'month')
-                      .map((column) => (
-                        <option key={column} value={column}>
-                          {column.charAt(0).toUpperCase() + column.slice(1)}
-                        </option>
-                      ))}
-                  </select>
-                </div>
-              </>
-            )}
-
-            {/* Colors */}
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-slate-700 mb-2">
-                Color Scheme
-              </label>
-              <div className="flex space-x-2">
-                {COLORS.slice(0, 5).map((color, index) => (
-                  <div 
-                    key={index} 
-                    className="w-6 h-6 rounded-full cursor-pointer hover:ring-2 hover:ring-offset-1 ring-slate-400"
-                    style={{ backgroundColor: color }}
-                  ></div>
-                ))}
-              </div>
-            </div>
-
-            {/* Advanced Options */}
-            <div className="mb-4">
-              <h3 className="text-sm font-medium text-slate-700 mb-2">Advanced Options</h3>
-              <div className="space-y-2">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="show-grid"
-                    className="h-4 w-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
-                    defaultChecked
-                  />
-                  <label htmlFor="show-grid" className="ml-2 block text-sm text-slate-700">
-                    Show grid lines
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="show-legend"
-                    className="h-4 w-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
-                    defaultChecked
-                  />
-                  <label htmlFor="show-legend" className="ml-2 block text-sm text-slate-700">
-                    Show legend
-                  </label>
-                </div>
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="show-tooltip"
-                    className="h-4 w-4 text-primary-600 border-slate-300 rounded focus:ring-primary-500"
-                    defaultChecked
-                  />
-                  <label htmlFor="show-tooltip" className="ml-2 block text-sm text-slate-700">
-                    Show tooltips
-                  </label>
-                </div>
-              </div>
-            </div>
+        <div className="lg:col-span-3">
+          {/* Chart container */}
+          <div className="card p-6">
+            {renderChart()}
           </div>
         </div>
 
-        {/* Chart Display */}
-        <div className="card p-6 lg:col-span-3 order-1 lg:order-2">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-slate-900">{title}</h2>
-            <div className="flex items-center text-xs text-slate-500">
-              <FileSpreadsheet size={14} className="mr-1" />
-              Sales_Data_2024_Q1.xlsx
+        <div className="lg:col-span-1">
+          {/* Settings panel */}
+          <div className="card p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-lg font-semibold text-slate-900">
+                Chart Settings
+              </h2>
+              <button 
+                onClick={() => setShowSettings(!showSettings)}
+                className="text-slate-500 hover:text-slate-700"
+              >
+                <ChevronDown 
+                  size={20} 
+                  className={`transform transition-transform ${showSettings ? 'rotate-180' : ''}`}
+                />
+              </button>
             </div>
-          </div>
-          
-          <div className="border border-slate-200 rounded-lg p-4 bg-white">
-            {renderChart()}
+
+            {showSettings && (
+              <div className="space-y-6">
+                {/* Chart type selection */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Chart Type
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setChartType('bar')}
+                      className={`p-3 rounded-lg border flex flex-col items-center justify-center ${
+                        chartType === 'bar'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-slate-200 hover:border-primary-300'
+                      }`}
+                    >
+                      <BarChartIcon size={20} />
+                      <span className="text-xs mt-1">Bar</span>
+                    </button>
+                    <button
+                      onClick={() => setChartType('line')}
+                      className={`p-3 rounded-lg border flex flex-col items-center justify-center ${
+                        chartType === 'line'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-slate-200 hover:border-primary-300'
+                      }`}
+                    >
+                      <LineChartIcon size={20} />
+                      <span className="text-xs mt-1">Line</span>
+                    </button>
+                    <button
+                      onClick={() => setChartType('pie')}
+                      className={`p-3 rounded-lg border flex flex-col items-center justify-center ${
+                        chartType === 'pie'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-slate-200 hover:border-primary-300'
+                      }`}
+                    >
+                      <PieChartIcon size={20} />
+                      <span className="text-xs mt-1">Pie</span>
+                    </button>
+                    <button
+                      onClick={() => setChartType('scatter')}
+                      className={`p-3 rounded-lg border flex flex-col items-center justify-center ${
+                        chartType === 'scatter'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-slate-200 hover:border-primary-300'
+                      }`}
+                    >
+                      <ScatterChart size={20} />
+                      <span className="text-xs mt-1">Scatter</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Axis selection */}
+                {chartType !== 'pie' && chartType !== '3d' && (
+                  <>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        X-Axis
+                      </label>
+                      <select
+                        value={xAxis}
+                        onChange={(e) => setXAxis(e.target.value)}
+                        className="form-select w-full"
+                      >
+                        {getColumns().map((column) => (
+                          <option key={column} value={column}>
+                            {column.charAt(0).toUpperCase() + column.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-2">
+                        Y-Axis
+                      </label>
+                      <select
+                        value={yAxis}
+                        onChange={(e) => setYAxis(e.target.value)}
+                        className="form-select w-full"
+                      >
+                        {getColumns().map((column) => (
+                          <option key={column} value={column}>
+                            {column.charAt(0).toUpperCase() + column.slice(1)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </>
+                )}
+
+                {/* Chart title */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Chart Title
+                  </label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="form-input w-full"
+                    placeholder="Enter chart title"
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -487,4 +411,4 @@ const VisualizationPage: React.FC = () => {
   );
 };
 
-export default VisualizationPage;
+export default VisualizationPage; 
