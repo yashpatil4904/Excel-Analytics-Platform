@@ -32,5 +32,13 @@ Command
       </a>
       <br />
     </td>
+    <td align="center">
+      <a href="https://github.com/Nikhil-N-bit">
+        <img src="https://github.com/eishanth.png" width="100" style="border-radius: 50%;" alt="Nikhil-N-bit"/>
+        <br />
+        <sub><b>Eishanth</b></sub>
+        </a>
+      <br/>
+    </td>
   </tr>
 </table>
